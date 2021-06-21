@@ -76,9 +76,8 @@ export class MainView extends React.Component {
           }
           />
         ))
-      } <
-      /div>
-      // </React.Fragment> or </>
+      }
+      </div>
     );
   }
 }
