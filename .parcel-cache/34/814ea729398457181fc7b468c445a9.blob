@@ -1,0 +1,122 @@
+var helpers = require("../../../../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// Bootstrap components
+// import Form from 'react-bootstrap/Form';
+// import Button from 'react-bootstrap/Button';
+parcelHelpers.export(exports, "LoginView", ()=>LoginView
+);
+// Function component with React Hook
+// Function component with React Hook
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _loginViewScss = require("./login-view.scss");
+var _s = $RefreshSig$();
+function LoginView(props) {
+    _s();
+    const [username, setUsername] = _react.useState('');
+    const [password, setPassword] = _react.useState('');
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        console.log(username, password);
+        // Send a request to the server for authentication, then call props.onLoggedIn(username)
+        _axiosDefault.default.post('https://brunoza-api.herokuapp.com/login', {
+            Username: username,
+            Password: password
+        }).then((response)=>{
+            const data = response.data;
+            console.log('data', data);
+            props.onLoggedIn(data);
+            window.open('/');
+        }).catch((e1)=>{
+            console.log('no such user');
+        });
+    };
+    return(/*#__PURE__*/ _reactDefault.default.createElement(Form, {
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 35
+        },
+        __self: this
+    }, /*#__PURE__*/ _reactDefault.default.createElement(Form.Group, {
+        controlId: "formUsername",
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 36
+        },
+        __self: this
+    }, /*#__PURE__*/ _reactDefault.default.createElement(Form.Label, {
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 37
+        },
+        __self: this
+    }, "Username:"), /*#__PURE__*/ _reactDefault.default.createElement(Form.Control, {
+        type: "text",
+        onChange: (e)=>setUsername(e.target.value)
+        ,
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 38
+        },
+        __self: this
+    })), /*#__PURE__*/ _reactDefault.default.createElement(Form.Group, {
+        controlId: "formPassword",
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 41
+        },
+        __self: this
+    }, /*#__PURE__*/ _reactDefault.default.createElement(Form.Label, {
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 42
+        },
+        __self: this
+    }, "Password:"), /*#__PURE__*/ _reactDefault.default.createElement(Form.Control, {
+        type: "password",
+        onChange: (e)=>setPassword(e.target.value)
+        ,
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 43
+        },
+        __self: this
+    })), /*#__PURE__*/ _reactDefault.default.createElement(Button, {
+        variant: "info",
+        type: "submit",
+        onClick: handleSubmit,
+        __source: {
+            fileName: "C:\\Users\\bruno\\OneDrive\\Desktop\\CareerFoundry\\Full_Stack_Immersion\\Achievement 3\\myflix_client\\src\\components\\login-view\\login-view.jsx",
+            lineNumber: 46
+        },
+        __self: this
+    }, "Log in")));
+}
+_s(LoginView, "wuQOK7xaXdVz4RMrZQhWbI751Oc=");
+_c = LoginView;
+// PropTypes to validate data type input
+LoginView.propTypes = {
+    user: _propTypesDefault.default.shape({
+        username: _propTypesDefault.default.string.isRequired,
+        password: _propTypesDefault.default.string.isRequired
+    }),
+    onLoggedIn: _propTypesDefault.default.func
+};
+var _c;
+$RefreshReg$(_c, "LoginView");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
