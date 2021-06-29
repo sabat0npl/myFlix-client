@@ -2,6 +2,11 @@
 
 
 
+.container {
+  margin-bottom: 100px;
+}
+
+
 .my-flix {
   color: steelblue;
 }
