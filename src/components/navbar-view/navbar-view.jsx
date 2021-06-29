@@ -31,7 +31,7 @@ export class NavbarView extends React.Component {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav activeKey="/">
               <Nav.Link as={Link} to={`/register`}>Home</Nav.Link>
-              <Nav.Link as={Link} to={`/users/${localStorage.getItem("user")}`} >Profile</Nav.Link>
+              <Nav.Link as={Link} to={`/profile`} >Profile</Nav.Link>
             </Nav>
             <Form inline>
               <Form.Control

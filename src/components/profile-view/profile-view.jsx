@@ -1,118 +1,151 @@
 import React from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { NavbarView } from '../navbar-view/navbar-view';
-// Bootstrap components
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import ListGroup from 'react-bootstrap/ListGroup';
-import ListGroupItem from 'react-bootstrap/ListGroupItem';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { Link } from "react-router-dom";
+
+import './profile-view.scss';
 
 export class ProfileView extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      username: '',
-      password: '',
-      email: '',
-      birthday: '',
-      favoriteMovies: []
-    }
-  }
-
-  componentDidMount() {
-    let accessToken = localStorage.getItem('token');
-    this.getUser(accessToken);
-  }
-
-  getUser(token) {
-    let url = 'https://allmymovies.herokuapp.com/users/' + localStorage.getItem('user');
-    axios.get(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((response) => {
-        this.thisState({
-          username: response.data.Username,
-          password: response.data.Password,
-          email: response.data.Email,
-          birthday: response.data.Birthday,
-          favoriteMovies: response.data.FavoriteMovies
-        });
-      });
-  }
-
-  // Delete a movie from the fav movie list
-  removeFavorite(movie) {
-    let token = localStorage.getitem('token');
-    let url = 'https://allmymovies.herokuapp.com/users/' + localStorage.getItem('user') + '/favorites/' + movie._id;
-    axios.delete(url,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        alert('This movie was deleted from your list.');
-        this.componentDidMount();
-      });
-  }
-
-
-  // let user delete their profile
-  handleDelete() {
-    let token = localStorage.getItem('token');
-    let user = localStorage.getItem('user');
-    axios.delete(
-      `https://allmymovies.herokuapp.com/users/${user}`, { headers: { Authorization: `Bearer ${token}` } }
-    )
-      .then(() => {
-        alert(user + 'was sucessfully deleted.');
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        window.location.pathname = '/';
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
 
   render() {
-    const { movies, onBackClick } = this.props;
-    const favoriteMovieList = movies.filter((movie) => {
-      return this.state.favoriteMovies.includes(movie._id);
-    });
+    let { user, token, history, userData, onNewUser, onSignOut} = this.props;
 
+    function updateInfo(token) {
+      const userInput = document.getElementById('username');
+      const passInput = document.getElementById('password');
+      const passVerInput = document.getElementById('passwordVer');
+      const emailInput = document.getElementById('email');
+      const dateInput = document.getElementById('DOB');
+
+      if (userInput.value.length > 12) {
+        const userErr = document.getElementById('user');
+        return userErr.innerText = "Username can only be 12 characters";
+      }
+
+      const nameChoice = userInput.value || userData.Username;
+      let passChoice = null;
+      if (passInput.value == "") {
+        passChoice = "";
+      } else {
+        passChoice = passInput.value;
+      }
+      const emailChoice = emailInput.value || userData.Email;
+      const dateChoice = dateInput.value || userData.DOB;
+
+      if (passInput.value === passVerInput.value) {
+        axios.put(`https://filmquarry.herokuapp.com/users/${user}`, 
+        { 
+          Username: nameChoice, Password: passChoice, Email: emailChoice, DOB: dateChoice 
+        },
+        { headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}}
+        )
+        .then(response => {
+          console.log('Success with updating account information');
+          let userData2 = response.data;
+          onNewUser(userData2);
+          if (userInput.value != "") {
+            window.location = `/users/${userData2.Username}`;
+          }
+          if (passChoice != "") {
+            window.location = `/users/${userData2.Username}`;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      } else {
+        const passErr = document.getElementById('pass');
+        const passErrVer = document.getElementById('passVer');
+        passErr.innerText = "The passwords must match";
+        passErrVer.innerText = "The passwords must match";
+      }
+    }
+
+    function deleteAcc(token) {
+      console.log('Not deleted yet');
+      axios.delete(`https://filmquarry.herokuapp.com/users/${user}`, 
+      { headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}})
+      .then(response => {
+        console.log(response);
+        console.log(`${user} has been deleted`);
+      })
+      .catch(e => {
+        console.log('There is an error');
+        console.log(e);
+      })
+    }
+    
+    if (userData.Username === 'testuser') {
+      return (
+        <>
+        <div className="centerProfile">
+          <h1 className="title my-4">Hello {`${userData.Username}`},</h1>
+          <h2 className="title-2 my-4">Current Information</h2>
+          <div className="align-text-left">
+            <div className=" my-2"><strong>Username:</strong> {`${userData.Username}`}</div>
+            <div className=" my-2"><strong>Email:</strong> {`${userData.Email}`}</div>
+            <div className=" my-2"><strong>Date of Birth:</strong> {`${Date()}`}</div>
+          </div>
+            <h2 className="title-2 my-4">Update Information</h2>
+            <div>The testuser account info cannot be updated!</div>
+          </div>
+        </>
+      );
+    }
     return (
-      <Card style={{ width: '18rem' }}>
-        <Card.Header>
-          <Nav variant='tabs' defaultActiveKey='/users'>
-            <Nav.Item></Nav.Item>
-            <Nav.item></Nav.item>
+      <>
+      <div className="centerProfile">
+        <h1 className="title my-4">Hello {`${userData.Username}`},</h1>
+        <h2 className="title-2 my-4">Current Information</h2>
+        <div className="align-text-left">
+          <div className=" my-2"><strong>Username:</strong> {`${userData.Username}`}</div>
+          <div className=" my-2"><strong>Email:</strong> {`${userData.Email}`}</div>
+          <div className=" my-2"><strong>Date of Birth:</strong> {`${Date()}`}</div>
+        </div>
+          <h2 className="title-2 my-4">Update Information</h2>
+          <form noValidate className="form">
 
-          </Nav>
-        </Card.Header>
+            <div className="input-wrap">
+              <label htmlFor="username">Username:</label>
+              <input type="text" id="username" placeholder="New Username"/>
+              <div id="user" className="error"></div>
+            </div>
 
-        <Card.Body>
-          <Card.Title>My Profile</Card.Title>
-          <Card.Text>
-            <ListGroup variant="flush">
-              <ListGroupItem>Username:<span className='text-color'>{username}</span></ListGroupItem>
-              <ListGroupItem>Email:<span className='text-color'>{email}</span></ListGroupItem>
-              <ListGroupItem>Birthday:<span className='text-color'>{birthday}</span></ListGroupItem>
-              <ListGroupItem>Favorite Movies:</ListGroupItem>
-            </ListGroup>
-          </Card.Text>
-          <Button variant='info' onClick={() => { onBackClick() }}>Back</Button>
-          <Button variant='info' onClick={() => { }}>Update Profile</Button>
-          <Button variant='danger' onClick={() => { this.handleDelete() }}>Delete</Button>
-        </Card.Body>
-      </Card>
-    )
+            <div className="input-wrap">
+              <label htmlFor="password">Password:</label>
+              <input id="password" type="password" placeholder="New Password"/>
+              <div id="pass" className="error"></div>
+            </div>
 
+            <div className="input-wrap">
+              <label htmlFor="password Verification">Verify Password:</label>
+              <input id="passwordVer" type="password" placeholder="Verify Password Change"/>
+              <div id="passVer" className="error"></div>
+            </div>
 
+            <div className="input-wrap">
+              <label htmlFor="email">Email:</label>
+              <input id="email" type="email" placeholder="New Email"/>
+              <div id="email-err" className="error"></div>
+            </div>
 
+            <div className="input-wrap">
+              <label htmlFor="DOB">Date of Birth:</label>
+              <input id="DOB" type="Date"/>
+              <div id="Date" className="error"></div>
+            </div>
+            
+            <div className="middle">
+              <Button className="m-3 bttn" variant="info" type="button" onClick={() =>{updateInfo(token)}}>Update</Button>
+              <Link to={`/`}>
+                <Button className="m-3 bttn" variant="info" type="button">Go Back</Button>
+              </Link>
+              <Button className="m-3 bttn" variant="info" type="button" onClick={ () => { deleteAcc(token); onSignOut(null); history.push('/'); } }>Delete Account</Button>
+            </div>
+          </form>
+        </div>
+      </>
+    );
   }
 }
-
-export default ProfileView;
