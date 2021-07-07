@@ -1,6 +1,8 @@
 // Function component with React Hook
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./registration-view.scss";
 // Bootstrap components
 import Form from "react-bootstrap/Form";
@@ -12,10 +14,16 @@ export function RegistrationView(props) {
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
 
-  const handleSubmit = (e) => {
+  const [usernameError, setUsernameError] = useState({});
+  const [passwordError, setPasswordError] = useState({});
+  const [emailError, setEmailError] = useState({});
+
+  const handleRegister = (e) => {
     e.preventDefault();
+    console.log(username, password, email, birthday);
     const isValid = formValidation();
     if (isValid) {
+      // Send a request to the server to register a new user
       axios
         .post("https://brunoza-api.herokuapp.com/users", {
           Username: username,
@@ -25,12 +33,11 @@ export function RegistrationView(props) {
         })
         .then((response) => {
           const data = response.data;
-          console.log(data);
-          window.open("/", "_self"); // the second argument '_self' is necessary so that the page will open in the current tab
-          props.RegistrationView(data);
+          console.log("data", data);
+          window.open("/", "_self"); // '_self' is necessary so that the page opens in the current tab
         })
         .catch((e) => {
-          console.log("error registering the user");
+          console.log("Error registering the user.");
         });
     }
   };
@@ -64,14 +71,19 @@ export function RegistrationView(props) {
 
   return (
     <Form>
-      <Form.Group controlId="RegUsername">
+      <Form.Group controlId="registerUsername">
         <Form.Label>Username:</Form.Label>
         <Form.Control
           type="text"
           onChange={(e) => setUsername(e.target.value)}
         />
       </Form.Group>
-      <Form.Group controlId="RegPassword">
+
+      {Object.keys(usernameError).map((key) => {
+        return <div key={key}>{usernameError[key]}</div>;
+      })}
+
+      <Form.Group controlId="registerPassword">
         <Form.Label>Password:</Form.Label>
         <Form.Control
           type="password"
@@ -79,12 +91,20 @@ export function RegistrationView(props) {
         />
       </Form.Group>
 
-      <Form.Group controlId="RegEmail">
+      {Object.keys(passwordError).map((key) => {
+        return <div key={key}>{passwordError[key]}</div>;
+      })}
+
+      <Form.Group controlId="registerEmail">
         <Form.Label>Email:</Form.Label>
         <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} />
       </Form.Group>
 
-      <Form.Group controlId="RegBirthday">
+      {Object.keys(emailError).map((key) => {
+        return <div key={key}>{emailError[key]}</div>;
+      })}
+
+      <Form.Group controlId="registerBirthday">
         <Form.Label>Birthday:</Form.Label>
         <Form.Control
           type="date"
@@ -92,9 +112,20 @@ export function RegistrationView(props) {
         />
       </Form.Group>
 
-      <Button variant="submit" type="submit" onClick={handleSubmit}>
-        Submit
-      </Button>
+      <Link to={"/"}>
+        <Button
+          style={{ margin: "3px" }}
+          variant="info"
+          type="submit"
+          onClick={handleRegister}
+        >
+          Register
+        </Button>
+      </Link>
+
+      <Link to={"/"}>
+        <Button variant="dark">Login</Button>
+      </Link>
     </Form>
   );
 }

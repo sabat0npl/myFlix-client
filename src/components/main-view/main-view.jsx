@@ -5,12 +5,9 @@ import { connect } from "react-redux";
 
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
-// #0
 import { setMovies } from "../../actions/actions";
 
-// we haven't written this one yet
 import MoviesList from "../movies-list/movies-list";
-
 import { LoginView } from "../login-view/login-view";
 import { NavbarView } from "../navbar-view/navbar-view";
 import { MovieView } from "../movie-view/movie-view";
@@ -26,7 +23,7 @@ class MainView extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: null
+      user: null,
     };
   }
 
@@ -42,94 +39,46 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
-    let accessToken = localStorage.getItem('token');
+    let accessToken = localStorage.getItem("token");
     if (accessToken !== null) {
       this.setState({
-        user: localStorage.getItem('user')
+        user: localStorage.getItem("user"),
       });
       this.getMovies(accessToken);
     }
   }
 
-  newUser(newData) {
-    localStorage.setItem("user", newData.Username);
-    this.setState({
-      userData: newData,
-      user: newData.Username,
-    });
-  }
-
-  setSelectedMovie(newSelectedMovie) {
-    this.setState({
-      selectedMovie: newSelectedMovie,
-    });
-  }
-
-  getAcc(token, user) {
-    axios
-      .get(`https://brunoza-api.herokuapp.com/users/${user}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        console.log("Success with getAcc");
-        this.setState({
-          userData: response.data,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-  /*When a user logs in, this function updates the user property in state to that particular user */
+  // To connect to login-view function component, if successful log in, it updates thes 'user' property in the state
   onLoggedIn(authData) {
+    console.log(authData);
     this.setState({
       user: authData.user.Username,
-      token: authData.token,
-      // userData: authData.data
     });
-    // LocalStorage will be used as a to retrive current user if needed
+
     localStorage.setItem("token", authData.token);
     localStorage.setItem("user", authData.user.Username);
-    localStorage.setItem('favoriteMovies', auth.Data.user.Favourites);
-    // localStorage.setItem("userData", authData.user.Username);
-    this.getAcc(authData.token, authData.user.Username);
+    localStorage.setItem("email", authData.user.Email);
+    localStorage.setItem("birthday", authData.user.Birthday);
+    localStorage.setItem("favoriteMovies", auth.Data.user.Favourites);
     this.getMovies(authData.token);
   }
 
+  // to enable user to logout and go back to welcome page
   onLoggedOut() {
     localStorage.clear();
     this.setState({
       user: null,
-      token: null,
-      userData: null,
     });
   }
 
-  loading() {
-    setTimeout(() => {
-      this.setState({
-        isLoaded: true,
-      });
-    }, 1400);
-  }
-
-  loading2() {
-    setTimeout(() => {
-      this.setState({
-        isLoaded2: true,
-      });
-    }, 3000);
-  }
-
   render() {
-    const { user, isLoaded, isLoaded2, token, userData } = this.state;
-    let {movies} = this.props; 
+    let { user } = this.state;
+    let { movies } = this.props;
 
     return (
       <>
         <Router>
-          <NavbarView />
+          <NavbarView movies={movies}/>
           <Row className="main-view justify-content-md-center">
             <Route
               exact
@@ -138,12 +87,22 @@ class MainView extends React.Component {
                 if (!user)
                   return (
                     <Col>
+                      <h1>Login</h1>
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
                     </Col>
                   );
                 if (movies.length === 0) return <div className="main-view" />;
-                // #6
                 return <MoviesList movies={movies} />;
+              }}
+            />
+            <Route
+              path="/register"
+              render={() => {
+                return (
+                  <Col md={6}>
+                    <RegistrationView />
+                  </Col>
+                );
               }}
             />
             <Route
@@ -210,44 +169,48 @@ class MainView extends React.Component {
                 );
               }}
             />
+
             <Route
-              path={`/profile`}
+              path="/users/me"
+              render={({ history }) => {
+                if (!user) return;
+                <Col>
+                  <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                </Col>;
+                if (movies.length === 0) return <div className="main-view" />;
+
+                return (
+                  <ProfileView
+                    favoriteMovies={localStorage.getItem("favoriteMovies")}
+                    username={this.state.user}
+                    email={localStorage.getItem("email")}
+                    birthday={localStorage.getItem("birthday")}
+                    movies={movies}
+                    onBackClick={() => history.goBack()}
+                  />
+                );
+              }}
+            />
+
+            <Route
+              path="/update/me"
               render={({ history }) => {
                 if (!user)
                   return (
-                    <Col>
+                    <Col md={6}>
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
                     </Col>
                   );
 
-                if (!userData && !isLoaded2) {
-                  return (
-                    <>
-                      <div className="loading">
-                        Loading<span className="spinner"></span>
-                      </div>
-                      {this.loading2()}
-                    </>
-                  );
-                }
+                if (movies.length === 0) return <div className="main-view" />;
+
                 return (
-                  <>
-                    <Col md={8}>
-                      <ProfileView
-                        movies={movies}
-                        user={user}
-                        token={token}
-                        history={history}
-                        userData={userData}
-                        onNewUser={(newData) => {
-                          this.newUser(newData);
-                        }}
-                        onSignOut={(signState) => {
-                          this.signOut(signState);
-                        }}
-                      />
-                    </Col>
-                  </>
+                  <Col md={8}>
+                    <ProfileUpdate
+                      movies={movies}
+                      onBackClick={() => history.goBack()}
+                    />
+                  </Col>
                 );
               }}
             />

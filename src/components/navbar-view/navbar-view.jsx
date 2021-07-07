@@ -26,20 +26,13 @@ export class NavbarView extends React.Component {
     return (
       <Container>
         <Navbar bg="light" expand="lg" fixed="top" className="container">
-          <Navbar.Brand href="">MyFlix</Navbar.Brand>
+          <Navbar.Brand href="/"> MyFlix </Navbar.Brand>
           <Navbar.Toggle area-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav activeKey="/">
-              <Nav.Link as={Link} to={`/register`}>Home</Nav.Link>
-              <Nav.Link as={Link} to={`/profile`} >Profile</Nav.Link>
+              <Nav.Link as={Link} to={`/register`}>Register</Nav.Link>
+              <Nav.Link as={Link} to={`/users/me`} >Profile</Nav.Link>
             </Nav>
-            <Form inline>
-              <Form.Control
-                type="text"
-                placeholder="Search Movies by Title"
-                className="mr-sm-2"
-              />
-            </Form>
             <Button onClick={() => logOut()} variant="light">
               Logout
             </Button>
@@ -51,19 +44,3 @@ export class NavbarView extends React.Component {
 }
 
 export default NavbarView;
-
-// Idea to bring up logged in user in Navbar:
-//
-// componentDidMount() {
-//   let accessToken = localStorage.getItem('token');
-//   if (accessToken !== null) {
-//     this.setState({
-//       user: localStorage.getItem('user')
-//     })
-//   }
-// }
-
-// const user = this.state;
-// <Navbar.Text>Signed in as: <a href='#login'>{user => this.onLoggedIn(user)}</a></Navbar.Text>
-
-// taken from Nav tag: onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
