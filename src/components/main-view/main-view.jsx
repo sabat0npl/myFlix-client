@@ -13,7 +13,6 @@ import MoviesList from "../movies-list/movies-list";
 
 import { LoginView } from "../login-view/login-view";
 import { NavbarView } from "../navbar-view/navbar-view";
-import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { DirectorView } from "../director-view/director-view";
 import { GenreView } from "../genre-view/genre-view";
@@ -27,12 +26,7 @@ class MainView extends React.Component {
   constructor() {
     super();
     this.state = {
-      token: null,
-      isLoaded: false,
-      isLoaded2: false,
-      selectedMovie: null,
-      user: null,
-      userData: null,
+      user: null
     };
   }
 
@@ -48,14 +42,11 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
-    let accessToken = localStorage.getItem("token");
-    let userToken = localStorage.getItem("user");
+    let accessToken = localStorage.getItem('token');
     if (accessToken !== null) {
       this.setState({
-        user: localStorage.getItem("user"),
-        token: localStorage.getItem("token"),
+        user: localStorage.getItem('user')
       });
-      this.getAcc(accessToken, userToken);
       this.getMovies(accessToken);
     }
   }
@@ -100,6 +91,7 @@ class MainView extends React.Component {
     // LocalStorage will be used as a to retrive current user if needed
     localStorage.setItem("token", authData.token);
     localStorage.setItem("user", authData.user.Username);
+    localStorage.setItem('favoriteMovies', auth.Data.user.Favourites);
     // localStorage.setItem("userData", authData.user.Username);
     this.getAcc(authData.token, authData.user.Username);
     this.getMovies(authData.token);
@@ -131,32 +123,14 @@ class MainView extends React.Component {
   }
 
   render() {
-    const { movies, user, isLoaded, isLoaded2, token, userData } = this.state;
+    const { user, isLoaded, isLoaded2, token, userData } = this.state;
+    let {movies} = this.props; 
 
     return (
       <>
         <Router>
           <NavbarView />
           <Row className="main-view justify-content-md-center">
-            <Route
-              exact
-              path="/"
-              render={() => {
-                if (!user)
-                  return (
-                    <Col key="LoginView">
-                      <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
-                    </Col>
-                  );
-                if (movies.length === 0) return <div className="main-view" />;
-                return movies.map((m) => (
-                  <Col md={3} key={m._id}>
-                    <MovieCard movie={m} />
-                  </Col>
-                ));
-              }}
-            />
-            let {movies} = this.props; let {user} = this.state;
             <Route
               exact
               path="/"
@@ -260,6 +234,7 @@ class MainView extends React.Component {
                   <>
                     <Col md={8}>
                       <ProfileView
+                        movies={movies}
                         user={user}
                         token={token}
                         history={history}

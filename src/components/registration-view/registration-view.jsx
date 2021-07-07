@@ -14,23 +14,52 @@ export function RegistrationView(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password, email, birthday);
-    axios
-      .post("https://brunoza-api.herokuapp.com/users", {
-        Username: username,
-        Password: password,
-        Email: email,
-        Birthday: birthday,
-      })
-      .then((response) => {
-        const data = response.data;
-        console.log(data);
-        window.open("/", "_self"); // the second argument '_self' is necessary so that the page will open in the current tab
-        props.RegistrationView(data);
-      })
-      .catch((e) => {
-        console.log("error registering the user");
-      });
+    const isValid = formValidation();
+    if (isValid) {
+      axios
+        .post("https://brunoza-api.herokuapp.com/users", {
+          Username: username,
+          Password: password,
+          Email: email,
+          Birthday: birthday,
+        })
+        .then((response) => {
+          const data = response.data;
+          console.log(data);
+          window.open("/", "_self"); // the second argument '_self' is necessary so that the page will open in the current tab
+          props.RegistrationView(data);
+        })
+        .catch((e) => {
+          console.log("error registering the user");
+        });
+    }
+  };
+
+  const formValidation = () => {
+    const usernameError = {};
+    const passwordError = {};
+    const emailError = {};
+    let isValid = true;
+
+    if (username.trim().length < 5) {
+      usernameError.usernameShort = "Minimum 5 characters.";
+      isValid = false;
+    }
+
+    if (password.trim().length < 1) {
+      passwordError.passwordMissing = "Password is required.";
+      isValid = false;
+    }
+
+    if (!email.includes(".") && !email.includes("@")) {
+      emailError.emailNotEmail = "Email is not valid.";
+      isValid = false;
+    }
+
+    setUsernameError(usernameError);
+    setPasswordError(passwordError);
+    setEmailError(emailError);
+    return isValid;
   };
 
   return (

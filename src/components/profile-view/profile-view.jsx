@@ -1,151 +1,121 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Link } from "react-router-dom";
-
-import './profile-view.scss';
+import { NavbarView } from '../navbar-view/navbar-view';
+// Bootstrap components
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import ListGroup from 'react-bootstrap/ListGroup';
+import ListGroupItem from 'react-bootstrap/ListGroupItem';
+import { Link } from 'react-router-dom';
 
 export class ProfileView extends React.Component {
 
-  render() {
-    let { user, token, history, userData, onNewUser, onSignOut} = this.props;
+  constructor() {
+    super();
+    this.state = {
+      username: '',
+      password: '',
+      email: '',
+      birthday: '',
+      favoriteMovies: [],
+      movies: ''
+    }
+  }
 
-    function updateInfo(token) {
-      const userInput = document.getElementById('username');
-      const passInput = document.getElementById('password');
-      const passVerInput = document.getElementById('passwordVer');
-      const emailInput = document.getElementById('email');
-      const dateInput = document.getElementById('DOB');
+  componentDidMount() {
+    let accessToken = localStorage.getItem('token');
+    this.getUser(accessToken);
+  }
 
-      if (userInput.value.length > 12) {
-        const userErr = document.getElementById('user');
-        return userErr.innerText = "Username can only be 12 characters";
-      }
-
-      const nameChoice = userInput.value || userData.Username;
-      let passChoice = null;
-      if (passInput.value == "") {
-        passChoice = "";
-      } else {
-        passChoice = passInput.value;
-      }
-      const emailChoice = emailInput.value || userData.Email;
-      const dateChoice = dateInput.value || userData.DOB;
-
-      if (passInput.value === passVerInput.value) {
-        axios.put(`https://filmquarry.herokuapp.com/users/${user}`, 
-        { 
-          Username: nameChoice, Password: passChoice, Email: emailChoice, DOB: dateChoice 
-        },
-        { headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}}
-        )
-        .then(response => {
-          console.log('Success with updating account information');
-          let userData2 = response.data;
-          onNewUser(userData2);
-          if (userInput.value != "") {
-            window.location = `/users/${userData2.Username}`;
-          }
-          if (passChoice != "") {
-            window.location = `/users/${userData2.Username}`;
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
+  getUser(token) {
+    let url =
+      'https://brunoza-api.herokuapp.com/users/' +
+      localStorage.getItem('user');
+    axios
+      .get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        this.setState({
+          username: response.data.Username,
+          password: response.data.Password,
+          email: response.data.Email,
+          birthday: response.data.Birthday,
+          favoriteMovies: response.data.FavoriteMovies
         });
-      } else {
-        const passErr = document.getElementById('pass');
-        const passErrVer = document.getElementById('passVer');
-        passErr.innerText = "The passwords must match";
-        passErrVer.innerText = "The passwords must match";
-      }
-    }
+      });
+  }
 
-    function deleteAcc(token) {
-      console.log('Not deleted yet');
-      axios.delete(`https://filmquarry.herokuapp.com/users/${user}`, 
-      { headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}})
-      .then(response => {
-        console.log(response);
-        console.log(`${user} has been deleted`);
+  removeFavorite(movie) {
+    let token = localStorage.getItem('token');
+    let url = 'https://brunoza-api.herokuapp.com/users/' + localStorage.getItem('user') + '/movies/' + movie._id;
+    axios
+      .delete(url, {
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .catch(e => {
-        console.log('There is an error');
-        console.log(e);
+      .then((response) => {
+        alert('This movie was removed.');
+        this.componentDidMount();
+      });
+  }
+
+  handleDelete() {
+    let token = localStorage.getItem('token');
+    let user = localStorage.getItem('user');
+    axios
+      .delete(
+        `https://brunoza-api.herokuapp.com/users/${user}`, { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        alert(user + ' was deleted');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        window.location.pathname = '/';
       })
-    }
-    
-    if (userData.Username === 'testuser') {
-      return (
-        <>
-        <div className="centerProfile">
-          <h1 className="title my-4">Hello {`${userData.Username}`},</h1>
-          <h2 className="title-2 my-4">Current Information</h2>
-          <div className="align-text-left">
-            <div className=" my-2"><strong>Username:</strong> {`${userData.Username}`}</div>
-            <div className=" my-2"><strong>Email:</strong> {`${userData.Email}`}</div>
-            <div className=" my-2"><strong>Date of Birth:</strong> {`${Date()}`}</div>
-          </div>
-            <h2 className="title-2 my-4">Update Information</h2>
-            <div>The testuser account info cannot be updated!</div>
-          </div>
-        </>
-      );
-    }
-    return (
-      <>
-      <div className="centerProfile">
-        <h1 className="title my-4">Hello {`${userData.Username}`},</h1>
-        <h2 className="title-2 my-4">Current Information</h2>
-        <div className="align-text-left">
-          <div className=" my-2"><strong>Username:</strong> {`${userData.Username}`}</div>
-          <div className=" my-2"><strong>Email:</strong> {`${userData.Email}`}</div>
-          <div className=" my-2"><strong>Date of Birth:</strong> {`${Date()}`}</div>
-        </div>
-          <h2 className="title-2 my-4">Update Information</h2>
-          <form noValidate className="form">
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
-            <div className="input-wrap">
-              <label htmlFor="username">Username:</label>
-              <input type="text" id="username" placeholder="New Username"/>
-              <div id="user" className="error"></div>
-            </div>
+  render() {
+    const { username, email, birthday, movies, onBackClick } = this.props;
+    const { favoriteMovies } = this.state;
+    const favoriteMovieList = movies.filter((movie) => { return favoriteMovies.includes(movie._id) });
 
-            <div className="input-wrap">
-              <label htmlFor="password">Password:</label>
-              <input id="password" type="password" placeholder="New Password"/>
-              <div id="pass" className="error"></div>
-            </div>
+    return <div style={{ marginTop: '70px', }}>
+      <div>
+        <NavbarView />
+      </div>
+      <Card style={{ width: '35rem' }}>
+        <Card.Body>
+          <Card.Title>My Profile</Card.Title>
+          <Card.Text>
+            <ListGroup variant='flush'>
+              <ListGroupItem>Username:<span style={{ marginLeft: '5px' }} className='text-color'>{username}</span></ListGroupItem>
+              <ListGroupItem>Email:<span style={{ marginLeft: '5px' }} className='text-color'>{email}</span></ListGroupItem>
+              <ListGroupItem>Birthday:<span style={{ marginLeft: '5px' }} className='text-color'>{birthday}</span></ListGroupItem>
+              <ListGroupItem>Favorite Movies:<span style={{ marginLeft: '5px' }} className='text-color'></span>
+                {favoriteMovieList.map((movie) => {
+                  return (
+                    <Col md={6} key={movie._id}>
+                      <div>{movie.Title}</div>
+                      <Button variant='outline-danger' size='sm' onClick={() => this.removeFavorite(movie)}>Remove</Button>
+                    </Col>
 
-            <div className="input-wrap">
-              <label htmlFor="password Verification">Verify Password:</label>
-              <input id="passwordVer" type="password" placeholder="Verify Password Change"/>
-              <div id="passVer" className="error"></div>
-            </div>
-
-            <div className="input-wrap">
-              <label htmlFor="email">Email:</label>
-              <input id="email" type="email" placeholder="New Email"/>
-              <div id="email-err" className="error"></div>
-            </div>
-
-            <div className="input-wrap">
-              <label htmlFor="DOB">Date of Birth:</label>
-              <input id="DOB" type="Date"/>
-              <div id="Date" className="error"></div>
-            </div>
-            
-            <div className="middle">
-              <Button className="m-3 bttn" variant="info" type="button" onClick={() =>{updateInfo(token)}}>Update</Button>
-              <Link to={`/`}>
-                <Button className="m-3 bttn" variant="info" type="button">Go Back</Button>
-              </Link>
-              <Button className="m-3 bttn" variant="info" type="button" onClick={ () => { deleteAcc(token); onSignOut(null); history.push('/'); } }>Delete Account</Button>
-            </div>
-          </form>
-        </div>
-      </>
-    );
+                  )
+                })}</ListGroupItem>
+            </ListGroup>
+          </Card.Text>
+          <Button style={{ margin: '3px' }} variant='info' onClick={() => { onBackClick() }}>Back</Button>
+          <Link to='/update/me'>
+            <Button style={{ margin: '3px' }} variant='info'>Edit Profile</Button>
+          </Link>
+          <Button style={{ margin: '3px' }} variant='danger' onClick={() => { this.handleDelete() }}>Delete</Button>
+        </Card.Body>
+      </Card>
+    </div>
   }
 }
+
+export default ProfileView;
