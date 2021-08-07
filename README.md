@@ -17,7 +17,7 @@ The web application will provide users with access to information about differen
 - Allows existing users to update their user info or to delete their account
 - Allows existing users to add or remove movies to/from their list of favorites
 
-# Stack, Dependencies, Environment, Hosting
+# Stack, Hosting
 
 ### Stack
 1. React
@@ -32,4 +32,4 @@ parcel src/index.html
 ```
 # Project Status
 
-The project is complete!
+The project is hosted [here!](https://brunoza-flix.netlify.app/)
