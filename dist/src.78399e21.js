@@ -54181,7 +54181,7 @@ var MovieView = /*#__PURE__*/function (_React$Component) {
         }
       }).then(function (response) {
         console.log(response);
-        window.open("/users/me", "_self");
+        window.open("#/users/me", "_self");
       });
     }
   }, {
@@ -54680,6 +54680,8 @@ var _reactRedux = require("react-redux");
 
 var _actions = require("../../actions/actions");
 
+var _reactRouterDom = require("react-router-dom");
+
 require("./profile-view.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -54778,7 +54780,17 @@ function ProfileView(_ref) {
         Authorization: "Bearer ".concat(token)
       }
     }).then(function (response) {
-      window.open("/users/me", "_self");
+      _axios.default.get("https://brunoza-api.herokuapp.com/users/".concat(user), {
+        headers: {
+          Authorization: "Bearer ".concat(token)
+        }
+      }).then(function (data) {
+        setFavoriteMovies(data.data.Favourites);
+      }).catch(function (e) {
+        console.log(e);
+      });
+
+      alert("Removed from favorite Movies!");
     }).catch(function (e) {
       console.log(e);
     });
@@ -54849,9 +54861,9 @@ function ProfileView(_ref) {
         localStorage.removeItem("user");
         localStorage.setItem("user", form.Username); //change the state of the username
 
-        setUser(form.Username); //redirect the user to their new profile page
-
-        window.open("/users/me", "_self");
+        setUser(form.Username);
+        setBirthdate(form.Birthday);
+        setEmail(form.Email); //redirect the user to their new profile page
       }).catch(function (e) {
         console.log(e);
       });
@@ -54944,7 +54956,7 @@ var _default = (0, _reactRedux.connect)(mapStateToProps, {
 })(ProfileView);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -55331,7 +55343,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58583" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59096" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

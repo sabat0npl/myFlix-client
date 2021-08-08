@@ -65,9 +65,17 @@ function ProfileView({ user, setUser, movies, setMovies }) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+        axios
+          .get(`https://brunoza-api.herokuapp.com/users/${user}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((data) => {
+            setFavoriteMovies(data.data.Favourites);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
         alert("Removed from favorite Movies!");
-        this.setState({ state: this.state });
-        // window.open("#/users/me", "_self");
       })
       .catch((e) => {
         console.log(e);
@@ -133,9 +141,9 @@ function ProfileView({ user, setUser, movies, setMovies }) {
           localStorage.setItem("user", form.Username);
           //change the state of the username
           setUser(form.Username);
+          setBirthdate(form.Birthday);
+          setEmail(form.Email);
           //redirect the user to their new profile page
-          this.setState({ state: this.state });
-          // window.open("#/users/me", "_self");
         })
         .catch((e) => {
           console.log(e);
