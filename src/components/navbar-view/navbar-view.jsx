@@ -31,7 +31,7 @@ export class NavbarView extends React.Component {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav activeKey="/">
               <Nav.Link as={Link} to={`/register`}>Register</Nav.Link>
-              <Nav.Link as={Link} to={`/users/me`} >Profile</Nav.Link>
+              <Nav.Link as={Link} to={`/users`} >Profile</Nav.Link>
             </Nav>
             <Button onClick={() => logOut()} variant="light">
               Logout
