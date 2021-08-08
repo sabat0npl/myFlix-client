@@ -26,7 +26,7 @@ export class MovieView extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        window.open("/users/me", "_self");
+        window.open("#/users/me", "_self");
       });
   }
 

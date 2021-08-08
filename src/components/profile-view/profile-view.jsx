@@ -64,7 +64,7 @@ function ProfileView({ user, setUser, movies, setMovies }) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        window.open("/users/me", "_self");
+        window.open("#/users/me", "_self");
       })
       .catch((e) => {
         console.log(e);
