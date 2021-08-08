@@ -8,7 +8,7 @@ import { setMovies, setUser } from "../../actions/actions";
 //import other views to be used
 import MoviesList from "../movies-list/movies-list";
 import { LoginView } from "../login-view/login-view";
-import NavbarView from "../navbar-view/navbar-view";
+import { NavbarView } from "../navbar-view/navbar-view";
 import { MovieView } from "../movie-view/movie-view";
 import { DirectorView } from "../director-view/director-view";
 import { GenreView } from "../genre-view/genre-view";
@@ -164,10 +164,13 @@ class MainView extends React.Component {
 
           <Route
             path="/users/me"
-            render={({match, history }) => {
-              if (!user) return <Col>
-                <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
-              </Col>;
+            render={({ match, history }) => {
+              if (!user)
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                  </Col>
+                );
               if (movies.length === 0) return <div className="main-view" />;
 
               return (
