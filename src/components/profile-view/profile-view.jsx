@@ -65,9 +65,9 @@ function ProfileView({ user, setUser, movies, setMovies }) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        window.open("#/users/me", "_self");
         alert("Removed from favorite Movies!");
-        window.open("#/users/me", "_self");
+        this.setState({ state: this.state });
+        // window.open("#/users/me", "_self");
       })
       .catch((e) => {
         console.log(e);
@@ -134,7 +134,8 @@ function ProfileView({ user, setUser, movies, setMovies }) {
           //change the state of the username
           setUser(form.Username);
           //redirect the user to their new profile page
-          window.open("#/users/me", "_self");
+          this.setState({ state: this.state });
+          // window.open("#/users/me", "_self");
         })
         .catch((e) => {
           console.log(e);
