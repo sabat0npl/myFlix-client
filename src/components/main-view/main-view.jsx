@@ -163,7 +163,7 @@ class MainView extends React.Component {
           />
 
           <Route
-            path={`/users`}
+            path={`/users/me`}
             render={({ match, history }) => {
               if (!user)
                 return (
