@@ -65,7 +65,7 @@ function ProfileView({ user, setUser, movies, setMovies }) {
       })
       .then((response) => {
         alert("This movie was removed.");
-        window.open(`/users/me`, "_self");
+        window.open("/users/me", "_self");
       });
   };
 
@@ -129,7 +129,7 @@ function ProfileView({ user, setUser, movies, setMovies }) {
           //change the state of the username
           setUser(form.Username);
           //redirect the user to their new profile page
-          window.open(`/users/me`, "_self");
+          window.open("/users/me", "_self");
         })
         .catch((e) => {
           console.log(e);
