@@ -54021,8 +54021,6 @@ var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
 
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 
-var _Form = _interopRequireDefault(require("react-bootstrap/Form"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -54074,7 +54072,7 @@ var NavbarView = /*#__PURE__*/function (_React$Component) {
         bg: "light",
         expand: "lg",
         fixed: "top",
-        id: "nav-container"
+        className: "container"
       }, /*#__PURE__*/_react.default.createElement(_Navbar.default.Brand, {
         href: "/"
       }, " MyFlix "), /*#__PURE__*/_react.default.createElement(_Navbar.default.Toggle, {
@@ -54104,7 +54102,7 @@ var NavbarView = /*#__PURE__*/function (_React$Component) {
 exports.NavbarView = NavbarView;
 var _default = NavbarView;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./navbar-view.scss":"components/navbar-view/navbar-view.scss","react-bootstrap/Navbar":"../node_modules/react-bootstrap/esm/Navbar.js","react-bootstrap/Nav":"../node_modules/react-bootstrap/esm/Nav.js","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Form":"../node_modules/react-bootstrap/esm/Form.js"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./navbar-view.scss":"components/navbar-view/navbar-view.scss","react-bootstrap/Navbar":"../node_modules/react-bootstrap/esm/Navbar.js","react-bootstrap/Nav":"../node_modules/react-bootstrap/esm/Nav.js","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js"}],"components/movie-view/movie-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -54682,8 +54680,6 @@ var _reactRedux = require("react-redux");
 
 var _actions = require("../../actions/actions");
 
-var _reactRouterDom = require("react-router-dom");
-
 require("./profile-view.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -54948,7 +54944,7 @@ var _default = (0, _reactRedux.connect)(mapStateToProps, {
 })(ProfileView);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -55081,7 +55077,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       var _this$props = this.props,
           movies = _this$props.movies,
           user = _this$props.user;
-      return /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_navbarView.NavbarView, {
+      return /*#__PURE__*/_react.default.createElement(_reactRouterDom.HashRouter, null, /*#__PURE__*/_react.default.createElement(_navbarView.NavbarView, {
         onLogout: function onLogout() {
           _this2.onLoggedOut();
         }
@@ -55335,7 +55331,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51824" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58583" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

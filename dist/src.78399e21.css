@@ -22,6 +22,9 @@ body {
   max-width: 20rem;
   margin: auto;
 }
+.container {
+  margin-bottom: 100px;
+}
 .profile-container {
   width: 100%;
   display: grid;

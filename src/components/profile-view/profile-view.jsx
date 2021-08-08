@@ -4,7 +4,6 @@ import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import { setUser } from "../../actions/actions";
-import { Link } from "react-router-dom";
 
 import "./profile-view.scss";
 

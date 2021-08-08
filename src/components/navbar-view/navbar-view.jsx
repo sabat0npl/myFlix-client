@@ -6,7 +6,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 
 let logOut = function () {
   localStorage.removeItem("token");
@@ -25,13 +24,17 @@ export class NavbarView extends React.Component {
   render() {
     return (
       <Container>
-        <Navbar bg="light" expand="lg" fixed="top" id="nav-container">
+        <Navbar bg="light" expand="lg" fixed="top" className="container">
           <Navbar.Brand href="/"> MyFlix </Navbar.Brand>
           <Navbar.Toggle area-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav activeKey="/">
-              <Nav.Link as={Link} to={`/register`}>Register</Nav.Link>
-              <Nav.Link as={Link} to={`/users/me`} >Profile</Nav.Link>
+              <Nav.Link as={Link} to={`/register`}>
+                Register
+              </Nav.Link>
+              <Nav.Link as={Link} to={`/users/me`}>
+                Profile
+              </Nav.Link>
             </Nav>
             <Button onClick={() => logOut()} variant="light">
               Logout
