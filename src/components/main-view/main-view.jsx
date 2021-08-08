@@ -164,9 +164,8 @@ class MainView extends React.Component {
 
           <Route
             path="/users/me"
-            render={({ history }) => {
-              if (!user) return;
-              <Col>
+            render={({match, history }) => {
+              if (!user) return <Col>
                 <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
               </Col>;
               if (movies.length === 0) return <div className="main-view" />;
@@ -189,7 +188,6 @@ let mapStateToProps = (state) => {
   return {
     movies: state.movies,
     user: state.user,
-    currentFavorites: state.currentFavorites,
   };
 };
 

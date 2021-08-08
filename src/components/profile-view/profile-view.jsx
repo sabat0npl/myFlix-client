@@ -4,6 +4,7 @@ import axios from "axios";
 import { Form, Button, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import { setUser } from "../../actions/actions";
+import { Link } from "react-router-dom";
 
 import "./profile-view.scss";
 
@@ -64,6 +65,7 @@ function ProfileView({ user, setUser, movies, setMovies }) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+        alert("Removed from favorite Movies!");
         window.open("/users/me", "_self");
       })
       .catch((e) => {

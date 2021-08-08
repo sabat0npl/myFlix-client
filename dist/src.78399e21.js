@@ -54683,6 +54683,8 @@ var _reactRedux = require("react-redux");
 
 var _actions = require("../../actions/actions");
 
+var _reactRouterDom = require("react-router-dom");
+
 require("./profile-view.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -54781,6 +54783,7 @@ function ProfileView(_ref) {
         Authorization: "Bearer ".concat(token)
       }
     }).then(function (response) {
+      alert("Removed from favorite Movies!");
       window.open("/users/me", "_self");
     }).catch(function (e) {
       console.log(e);
@@ -54947,7 +54950,7 @@ var _default = (0, _reactRedux.connect)(mapStateToProps, {
 })(ProfileView);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-bootstrap":"../node_modules/react-bootstrap/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./profile-view.scss":"components/profile-view/profile-view.scss"}],"components/main-view/main-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -55190,16 +55193,13 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
         path: "/users/me",
         render: function render(_ref4) {
-          var history = _ref4.history;
-          if (!user) return;
-
-          /*#__PURE__*/
-          _react.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/_react.default.createElement(_loginView.LoginView, {
+          var match = _ref4.match,
+              history = _ref4.history;
+          if (!user) return /*#__PURE__*/_react.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/_react.default.createElement(_loginView.LoginView, {
             onLoggedIn: function onLoggedIn(user) {
               return _this2.onLoggedIn(user);
             }
           }));
-
           if (movies.length === 0) return /*#__PURE__*/_react.default.createElement("div", {
             className: "main-view"
           });
@@ -55220,8 +55220,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     movies: state.movies,
-    user: state.user,
-    currentFavorites: state.currentFavorites
+    user: state.user
   };
 };
 
@@ -55338,7 +55337,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64389" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52284" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
