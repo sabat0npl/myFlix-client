@@ -65,7 +65,6 @@ function ProfileView({ user, setUser, movies, setMovies }) {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        alert("Removed from favorite Movies!");
         window.open("/users/me", "_self");
       })
       .catch((e) => {
