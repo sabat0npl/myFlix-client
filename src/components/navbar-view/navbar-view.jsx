@@ -25,7 +25,7 @@ export class NavbarView extends React.Component {
   render() {
     return (
       <Container>
-        <Navbar bg="light" expand="lg" fixed="top" className="container">
+        <Navbar bg="light" expand="lg" fixed="top" id="nav-container">
           <Navbar.Brand href="/"> MyFlix </Navbar.Brand>
           <Navbar.Toggle area-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">

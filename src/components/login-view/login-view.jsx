@@ -5,10 +5,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import "./login-view.scss";
 // Bootstrap components
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Form, Button } from "react-bootstrap";
 
-export function LoginView(props) {
+export function LoginView({onLoggedIn}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,9 +16,7 @@ export function LoginView(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password);
     // Send a request to the server for authentication, then call props.onLoggedIn(username)
-    axios;
     axios
       .post(
         `https://brunoza-api.herokuapp.com/login?Username=${username}&Password=${password}`
@@ -27,11 +24,11 @@ export function LoginView(props) {
       .then((response) => {
         const data = response.data;
         console.log("data", data);
-        props.onLoggedIn(data);
-        window.open("/");
+        onLoggedIn(data);
       })
       .catch((e) => {
-        console.log("no such user");
+        console.error(e);
+        alert("Can not find that Username and Password");
       });
   };
 
@@ -56,7 +53,7 @@ export function LoginView(props) {
   };
 
   return (
-    <Form>
+    <Form id="form-styling">
       <Form.Group controlId="formUsername">
         <Form.Label>Username:</Form.Label>
         <Form.Control

@@ -1,12 +1,10 @@
 // Function component with React Hook
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./registration-view.scss";
 // Bootstrap components
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Form, Button } from "react-bootstrap";
 
 export function RegistrationView(props) {
   const [username, setUsername] = useState("");
@@ -20,7 +18,6 @@ export function RegistrationView(props) {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log(username, password, email, birthday);
     const isValid = formValidation();
     if (isValid) {
       // Send a request to the server to register a new user
@@ -33,11 +30,12 @@ export function RegistrationView(props) {
         })
         .then((response) => {
           const data = response.data;
-          console.log("data", data);
-          window.open("/", "_self"); // '_self' is necessary so that the page opens in the current tab
+          window.open("/", "_self");
+          alert("You have regiseterd!  Please login.");
         })
         .catch((e) => {
-          console.log("Error registering the user.");
+          alert("Error registering the user. Please try a different username");
+          console.log(error);
         });
     }
   };
