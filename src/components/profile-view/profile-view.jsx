@@ -164,7 +164,7 @@ function ProfileView({ user, setUser, movies, setMovies }) {
                   <Button
                     variant="outline-danger"
                     size="sm"
-                    onClick={() => removeFavorite(movie)}
+                    onClick={() => this.removeFavorite(movie)}
                   >
                     Remove
                   </Button>
